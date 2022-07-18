@@ -1,0 +1,34 @@
+using System;
+using System.IO;
+namespace MyApp // Note: actual namespace depends on the project name.
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] files = Directory.GetFiles(@"F:\\", "*");//считываем из папки файлы
+           List<string> auto = files.ToList();//создаем контейнер из файлов
+           foreach (string s in auto)//выводим файлы на экран
+               Console.WriteLine(s + "  ");
+            var extensionGroups = files.GroupBy(Path.GetExtension);//группируем файлы по расширениям
+            Dictionary<string, string[]> d = new Dictionary<string, string[]>();//заводим словарь для групп файлов с разными расширениями
+            foreach (var group in extensionGroups)// разбиваем на группы с ключем-расширение
+            {   
+                d.Add(group.Key, group.ToArray());
+                Console.Write($"Файлов с расширением {group.Key} - ");
+                //определяем количество файлов с каждым расширением
+                int index = 0;
+                int i = 0;
+                foreach (string s in auto)
+                {
+                    index = s.IndexOf(group.Key);
+                    if (index > 0) i++;
+                }
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine($"Количество расширений: {d.Count} ");
+            
+        }
+    }
+}
